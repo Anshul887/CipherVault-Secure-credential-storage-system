@@ -1,23 +1,30 @@
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
+import cookieParser
+from "cookie-parser";
 
-import authRoutes from "./routes/auth.routes";
+import userRoutes
+from "./routes/user.routes";
 
-const app = express();
+import {
+ authLimiter
+}
+from "./middleware/rateLimit.middleware";
 
-app.use(cors());
+import {
+ errorHandler
+}
+from "./middleware/error.middleware";
 
-app.use(helmet());
-
-app.use(morgan("dev"));
-
-app.use(express.json());
+app.use(cookieParser());
 
 app.use(
-  "/api/auth",
-  authRoutes
+ "/api/auth",
+ authLimiter,
+ authRoutes
 );
 
-export default app;
+app.use(
+ "/api/users",
+ userRoutes
+);
+
+app.use(errorHandler);
