@@ -130,6 +130,37 @@ export class AuthController {
           message:
             "Invalid refresh token"
         });
+      static async logout(
+ req: Request,
+ res: Response
+){
+
+ const token =
+   req.cookies.refreshToken;
+
+ if(token){
+
+   const payload =
+     jwt.decode(token) as any;
+
+   if(payload?.userId){
+
+     await AuthService
+      .saveRefreshToken(
+        payload.userId,
+        ""
+      );
+   }
+ }
+
+ res.clearCookie(
+   "refreshToken"
+ );
+
+ res.json({
+   message:"Logged out"
+ });
+}
 
     }
   }
