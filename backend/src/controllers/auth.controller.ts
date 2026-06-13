@@ -165,3 +165,31 @@ export class AuthController {
     }
   }
 }
+import speakeasy from "speakeasy";
+
+const secret =
+ speakeasy.generateSecret({
+   name:"CipherVault"
+ });
+
+return {
+ secret:
+ secret.base32
+};
+import QRCode from "qrcode";
+
+const qr =
+ await QRCode.toDataURL(
+  secret.otpauth_url!
+ );
+const verified =
+ speakeasy.totp.verify({
+
+  secret:user.twoFactorSecret!,
+
+  encoding:"base32",
+
+  token:code
+
+ });
+
