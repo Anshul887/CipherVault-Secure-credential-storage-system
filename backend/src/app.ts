@@ -12,6 +12,13 @@ from "./middleware/rateLimit.middleware";
 import {
  errorHandler
 }
+ import vaultRoutes
+from "./routes/vault.routes";
+
+app.use(
+ "/api/vaults",
+ vaultRoutes
+);
 from "./middleware/error.middleware";
 
 app.use(cookieParser());
