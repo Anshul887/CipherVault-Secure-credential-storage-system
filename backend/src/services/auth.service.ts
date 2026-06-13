@@ -1,69 +1,42 @@
-import { prisma } from "../config/prisma";
+import { prisma }
+from "../config/prisma";
+
 import {
   hashPassword,
   comparePassword
-} from "../utils/bcrypt";
+}
+from "../utils/bcrypt";
 
 export class AuthService {
 
-  static async register(
-    name: string,
-    email: string,
-    password: string
+  static async saveRefreshToken(
+    userId: string,
+    token: string
   ) {
 
-    const existingUser =
-      await prisma.user.findUnique({
-        where: { email }
-      });
+    return prisma.user.update({
 
-    if (existingUser) {
-      throw new Error("User already exists");
-    }
+      where: {
+        id: userId
+      },
 
-    const hashed =
-      await hashPassword(password);
+      data: {
+        refreshToken: token
+      }
 
-    const user =
-      await prisma.user.create({
-        data: {
-          name,
-          email,
-          password: hashed
-        }
-      });
+    });
 
-    return user;
   }
 
-  static async login(
-    email: string,
-    password: string
+  static async findById(
+    id: string
   ) {
 
-    const user =
-      await prisma.user.findUnique({
-        where: { email }
-      });
+    return prisma.user.findUnique({
 
-    if (!user) {
-      throw new Error(
-        "Invalid credentials"
-      );
-    }
+      where: { id }
 
-    const match =
-      await comparePassword(
-        password,
-        user.password
-      );
+    });
 
-    if (!match) {
-      throw new Error(
-        "Invalid credentials"
-      );
-    }
-
-    return user;
   }
 }
