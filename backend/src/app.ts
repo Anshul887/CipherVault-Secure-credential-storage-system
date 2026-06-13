@@ -35,3 +35,7 @@ app.use(
 );
 
 app.use(errorHandler);
+app.use(
+ "/api/credentials",
+ credentialRoutes
+);
