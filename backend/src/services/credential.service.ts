@@ -1,0 +1,10 @@
+createCredential()
+getCredentials()
+getCredentialById()
+updateCredential()
+deleteCredential()
+encryptedPassword:
+  encrypt(password)
+decrypt(
+ credential.encryptedPassword
+)
