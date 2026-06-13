@@ -13,15 +13,36 @@ enum Role {
 }
 
 model User {
-  id           String   @id @default(uuid())
+  id           String @id @default(uuid())
+
   name         String
-  email        String   @unique
+  email        String @unique
   password     String
 
-  role         Role     @default(USER)
+  role         Role @default(USER)
 
   refreshToken String?
 
+  vaults       Vault[]
+
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Vault {
+  id          String @id @default(uuid())
+
+  name        String
+  description String?
+
+  userId      String
+
+  owner       User @relation(
+    fields: [userId],
+    references: [id],
+    onDelete: Cascade
+  )
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
